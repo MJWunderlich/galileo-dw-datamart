@@ -1,6 +1,6 @@
 *.py[cod]
 *.log
-*.env2
+*.env
 
 **.ipynb_checkpoints
 
