@@ -96,7 +96,7 @@ def rebuild_silver_layer():
     build(client)
 
 
-def test_silver_layers():
+def test_silver_layer():
     """
     Verifica la salud de cada tabla en la capa silver revisando el número de filas.
 
@@ -133,4 +133,4 @@ def test_silver_layers():
 
 if __name__ == "__main__":
     rebuild_silver_layer()
-    test_silver_layers()
+    test_silver_layer()
