@@ -235,7 +235,35 @@ def load_table(mysql_conn, ch_client, table_name):
     log.info(f"  {table_name} — {len(rows)} rows loaded")
 
 
-def exec_bronze_etl():
+def teardown():
+    """
+    Elimina todas las tablas del nivel de bronce en ClickHouse.
+
+    Obtiene la lista de tablas directamente desde ClickHouse para asegurarse
+    de que solo se eliminen las tablas que realmente existen en el esquema de bronce.
+
+    Raises:
+        clickhouse_driver.errors.Error: Si ocurre algún problema con las operaciones
+        en la base de datos ClickHouse.
+    """
+    log.info("--- Tearing down bronze layer ---")
+    ch_client = get_clickhouse_client()
+
+    tables = ch_client.execute(f"SHOW TABLES FROM {CLICKHOUSE['bronze']}")
+    tables = [row[0] for row in tables]
+
+    if not tables:
+        log.info("No tables found in bronze layer, nothing to drop")
+        return
+
+    for table in tables:
+        ch_client.execute(f"DROP TABLE IF EXISTS {CLICKHOUSE['bronze']}.{table}")
+        log.info(f"  Dropped {CLICKHOUSE['bronze']}.{table}")
+
+    log.info(f"Teardown complete — {len(tables)} tables dropped")
+
+
+def build():
     """
     Ejecuta el proceso ETL (Extract, Transform, Load) para cargar datos desde
     MySQL hacia el nivel de bronce en ClickHouse.
@@ -280,6 +308,31 @@ def exec_bronze_etl():
     mysql_conn.close()
     log.info("Bronze layer load complete")
 
+    
+def rebuild_bronze_layer():
+    """
+    Reconstruye el nivel de bronce en la base de datos ClickHouse.
+
+    Este metodo ejecuta dos pasos principales:
+        1. Llama al metodo `teardown` para eliminar todas las tablas
+           existentes en el esquema de bronce.
+        2. Llama al metodo `build` para realizar un proceso ETL desde MySQL
+           al nivel de bronce en ClickHouse, creando nuevas tablas 
+           y cargando los datos.
+
+    Importante:
+        Utilice este metodo cuando sea necesario redefinir por completo
+        el nivel de bronce en ClickHouse, comenzando desde cero.
+
+    Raises:
+        clickhouse_driver.errors.Error: Si ocurre un error al interactuar con 
+        la base de datos ClickHouse.
+        mysql.connector.Error: Si ocurre un problema al interactuar con la 
+        base de datos MySQL.
+    """
+    teardown()
+    build()
+
 
 if __name__ == "__main__":
-    exec_bronze_etl()
+    rebuild_bronze_layer()
