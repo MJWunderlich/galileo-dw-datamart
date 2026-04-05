@@ -1,8 +1,9 @@
 import os
 from dotenv import load_dotenv
 
-# Cargar el archivo `config/.env` donde se guardan los valores de configuración del proyecto
-load_dotenv()
+
+ENV_FILE = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(ENV_FILE, override=True)
 
 MYSQL = {
     "host":     os.getenv("DB_HOST"),
