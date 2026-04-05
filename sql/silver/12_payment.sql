@@ -9,7 +9,7 @@ SELECT
     p.rental_id         AS rental_id,
     p.amount            AS amount,
     p.payment_date      AS payment_date,
-    toYYYYMM(p.payment_date) AS payment_month,
+    toYYYYMMDD(p.payment_date) AS payment_day,
     r.film_id           AS film_id,
     r.film_title        AS film_title,
     r.category          AS category,

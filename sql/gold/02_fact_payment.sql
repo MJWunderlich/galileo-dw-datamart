@@ -1,7 +1,7 @@
 CREATE TABLE sakila_gold.fact_payment AS
 SELECT p.payment_id    AS payment_id,
        p.payment_date  AS payment_date,
-       p.payment_month AS payment_month,
+       p.payment_day   AS payment_day,
        p.amount        AS amount,
        p.customer_id   AS customer_id,
        p.customer_name AS customer_name,
