@@ -1,4 +1,4 @@
-CREATE TABLE sakila_gold.fact_staff_performance AS
+CREATE TABLE sakila_gold.agg_staff_performance AS
 SELECT st.staff_id                  AS staff_id,
        st.full_name                 AS full_name,
        st.store_id                  AS store_id,
