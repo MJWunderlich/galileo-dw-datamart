@@ -1,0 +1,1 @@
+-- Bronze se crea 100% via código (ver etl/bronze/load.py)
