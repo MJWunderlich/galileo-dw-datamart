@@ -18,11 +18,14 @@ SQL_DIR = os.path.join(os.path.dirname(__file__), "../../sql/gold")
 GOLD_TABLES = [
     "fact_rental",
     "fact_payment",
-    "fact_actor_rentals",
+    "agg_actor_rentals",
     "fact_inventory",
-    "fact_staff_performance",
-    "fact_film_performance",
-    "fact_customer_behavior",
+    "agg_staff_performance",
+    "agg_film_performance",
+    "agg_customer_behavior",
+    "dim_customer",
+    "dim_actor",
+    "dim_film",
 ]
 
 def get_client() -> Client:
